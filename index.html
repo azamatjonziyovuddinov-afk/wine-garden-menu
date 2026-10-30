@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WINE GARDEN — Наше меню</title>
+  <meta name="description" content="Электронное меню ресторана авторской кухни WINE GARDEN">
+  <meta name="theme-color" content="#0b1f17">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+/* ===== WINE GARDEN — стили ===== */
+:root {
+  --green-900: #07150f;
+  --green-800: #0b1f17;
+  --green-700: #123222;
+  --green-600: #1a4630;
+  --gold: #c9a54b;
+  --gold-light: #e6cf8f;
+  --white: #f7f4ec;
+  --muted: #a9b5ac;
+  --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: radial-gradient(circle at top, var(--green-700), var(--green-900) 60%) fixed;
+  color: var(--white);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ----- Шапка ----- */
+.hero { text-align: center; padding: 48px 20px 24px; animation: fade .8s ease both; }
+.logo {
+  font-family: var(--serif);
+  font-size: clamp(34px, 8vw, 56px);
+  font-weight: 700;
+  letter-spacing: .22em;
+  color: var(--gold);
+  text-shadow: 0 2px 20px rgba(201,165,75,.25);
+}
+.logo.small { font-size: 22px; }
+.tagline { font-size: 13px; letter-spacing: .25em; text-transform: uppercase; color: var(--gold-light); margin-top: 6px; }
+.divider { width: 70px; height: 1px; background: var(--gold); margin: 22px auto; position: relative; }
+.divider::after { content: ""; position: absolute; left: 50%; top: -3px; width: 7px; height: 7px; background: var(--gold); transform: translateX(-50%) rotate(45deg); }
+h1 { font-family: var(--serif); font-size: clamp(30px, 6vw, 44px); font-weight: 600; }
+.subtitle { color: var(--muted); margin-top: 4px; }
+
+.search-box { position: relative; max-width: 460px; margin: 24px auto 0; }
+#search {
+  width: 100%; padding: 14px 44px 14px 18px; font: inherit; font-size: 16px;
+  color: var(--white); background: rgba(255,255,255,.06);
+  border: 1px solid rgba(201,165,75,.4); border-radius: 30px; outline: none;
+  transition: border-color .25s, box-shadow .25s;
+}
+#search::placeholder { color: var(--muted); }
+#search:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,165,75,.18); }
+#clear { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: 0; color: var(--gold); font-size: 26px; cursor: pointer; line-height: 1; }
+
+/* ----- Категории ----- */
+.cats-wrap {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(7,21,15,.92); backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(201,165,75,.2);
+}
+.cats {
+  display: flex; gap: 10px; overflow-x: auto; padding: 12px 16px;
+  max-width: 1100px; margin: 0 auto; scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.cats::-webkit-scrollbar { display: none; }
+.chip {
+  flex: 0 0 auto; padding: 9px 18px; font: inherit; font-size: 14px; font-weight: 500;
+  color: var(--white); background: transparent; border: 1px solid rgba(201,165,75,.45);
+  border-radius: 30px; cursor: pointer; white-space: nowrap; transition: all .25s;
+}
+.chip:hover { border-color: var(--gold); color: var(--gold-light); }
+.chip.active { background: var(--gold); color: var(--green-900); border-color: var(--gold); font-weight: 600; }
+
+/* ----- Меню ----- */
+.menu { max-width: 1100px; margin: 0 auto; padding: 8px 16px 40px; }
+.section { padding-top: 34px; animation: fade .5s ease both; }
+.section h2 {
+  font-family: var(--serif); font-size: clamp(26px, 5vw, 36px); font-weight: 600;
+  color: var(--gold); text-align: center; margin-bottom: 20px;
+}
+.section h2::after { content: ""; display: block; width: 50px; height: 1px; background: var(--gold); margin: 10px auto 0; }
+
+.grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.card {
+  display: flex; flex-direction: column; overflow: hidden;
+  background: linear-gradient(160deg, rgba(26,70,48,.55), rgba(11,31,23,.9));
+  border: 1px solid rgba(201,165,75,.22); border-radius: 18px;
+  transition: transform .3s, border-color .3s, box-shadow .3s;
+}
+.card:hover { transform: translateY(-4px); border-color: var(--gold); box-shadow: 0 12px 30px rgba(0,0,0,.4); }
+
+.img { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--green-700); }
+.img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
+.card:hover .img img { transform: scale(1.05); }
+.placeholder {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  background: radial-gradient(circle at 30% 20%, var(--green-600), var(--green-800) 70%);
+  color: var(--gold);
+}
+.placeholder .ico { font-size: 34px; opacity: .85; }
+.placeholder .wg { font-family: var(--serif); font-size: 15px; letter-spacing: .3em; opacity: .7; }
+
+.body { padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1; }
+.body h3 { font-family: var(--serif); font-size: 22px; font-weight: 600; line-height: 1.2; }
+.body p { color: var(--muted); font-size: 14px; margin-top: 6px; flex: 1; }
+.price { margin-top: 14px; font-family: var(--serif); font-size: 26px; font-weight: 700; color: var(--gold-light); }
+.price small { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--gold); margin-left: 3px; }
+.price.unknown { font-size: 18px; font-style: italic; font-weight: 500; color: var(--muted); }
+
+.empty { text-align: center; padding: 70px 20px; font-family: var(--serif); font-size: 28px; color: var(--gold-light); }
+
+.footer { text-align: center; padding: 30px 20px 40px; color: var(--muted); font-size: 13px; border-top: 1px solid rgba(201,165,75,.2); }
+
+@keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* ----- Планшет и компьютер ----- */
+@media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } .cats { justify-content: center; flex-wrap: wrap; } }
+@media (min-width: 960px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 639px) { .cats { justify-content: flex-start; } }
+
+/* ----- Логотип и контакты ----- */
+.logo-img { display: block; width: min(260px, 62vw); height: auto; margin: 0 auto; mix-blend-mode: screen; }
+.contacts { display: flex; justify-content: center; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+.btn { display: inline-block; padding: 12px 24px; border-radius: 30px; background: var(--gold); color: var(--green-900); font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid var(--gold); transition: transform .25s, background .25s; }
+.btn:hover { transform: translateY(-2px); background: var(--gold-light); }
+.btn.ghost { background: transparent; color: var(--gold-light); }
+.btn.ghost:hover { background: rgba(201,165,75,.15); }
+.flink { color: var(--gold-light); text-decoration: none; font-weight: 500; }
+.flink:hover { text-decoration: underline; }
+.footer p + p { margin-top: 6px; }
+
+/* ----- Текстовый логотип (цвет как на логотипе) ----- */
+.brand { --logo: #e6c28b; color: var(--logo); font-family: var(--serif); }
+.brand .mono { font-size: clamp(64px, 18vw, 96px); font-weight: 600; line-height: 1; letter-spacing: -.04em; }
+.brand .logo { color: var(--logo); text-shadow: none; font-size: clamp(30px, 8vw, 50px); font-weight: 600; letter-spacing: .12em; margin-top: 4px; }
+.brand .rest { display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 13px; letter-spacing: .5em; margin: 10px auto 0; max-width: 360px; }
+.brand .rest span { flex: 1; height: 1px; background: var(--logo); opacity: .8; }
+.brand .since { font-size: 12px; letter-spacing: .15em; margin-top: 12px; opacity: .85; }
+.tagline { margin-top: 16px; }
+.brand .mono { position: relative; width: 1.4em; height: 1.15em; margin: 0 auto; font-size: clamp(76px, 22vw, 112px); letter-spacing: 0; line-height: 1; }
+.brand .mono span { position: absolute; }
+.placeholder .ico { font-size: 52px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.45)); }
+.brand .mono .w { left: 0; top: 0; }
+.brand .mono .g { left: .52em; top: .3em; }
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="brand">
+      <div class="mono" aria-label="WG"><span class="w">W</span><span class="g">G</span></div>
+      <div class="logo">WINE GARDEN</div>
+      <div class="rest"><span></span>RESTAURANT<span></span></div>
+      <div class="since">SINCE 2017</div>
+    </div>
+    <p class="tagline">Ресторан авторской кухни</p>
+    <div class="divider"></div>
+    <h1>Наше меню</h1>
+    <p class="subtitle">Выберите блюдо по вкусу</p>
+
+    <div class="search-box">
+      <input id="search" type="search" placeholder="Поиск блюда…" autocomplete="off" aria-label="Поиск блюда">
+      <button id="clear" type="button" aria-label="Очистить поиск" hidden>×</button>
+    </div>
+    <div class="contacts">
+      <a class="btn" href="tel:+998904070027">📞 Позвонить</a>
+      <a class="btn ghost" href="https://www.instagram.com/winegarden_restaurant/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a class="btn ghost" href="https://t.me/WinegardenFergana" target="_blank" rel="noopener noreferrer">Telegram</a>
+    </div>
+  </header>
+
+  <nav class="cats-wrap" aria-label="Категории меню">
+    <div id="cats" class="cats"></div>
+  </nav>
+
+  <main id="menu" class="menu"></main>
+
+  <footer class="footer">
+    <div class="logo small">WINE GARDEN</div>
+    <p><a class="flink" href="tel:+998904070027">+998 90 407 00 27</a> · <a class="flink" href="https://www.instagram.com/winegarden_restaurant/" target="_blank" rel="noopener noreferrer">@winegarden_restaurant</a> · <a class="flink" href="https://t.me/WinegardenFergana" target="_blank" rel="noopener noreferrer">@WinegardenFergana</a></p>
+    <p>Все цены указаны в узбекских сумах (UZS)</p>
+  </footer>
+
+  <script>
+/* ===== WINE GARDEN — электронное меню =====
+   КАК МЕНЯТЬ МЕНЮ:
+   - Каждое блюдо: dish("Название", ЦЕНА, "Описание", "файл-фото.jpg")
+   - Цена — число без пробелов (например 60000). Если цены нет — null.
+   - Фото: положите файл в папку images/ и впишите его имя последним параметром.
+     Если фото не указано — показывается красивая заставка (placeholder).
+   - Позиции с пометкой «ПРОВЕРИТЬ» — сомнительные места исходного меню.
+*/
+
+const IMAGE_DIR = "images/";
+
+// Вспомогательная функция: создаёт объект блюда
+function dish(name, price, description, image) {
+  return { name: name, price: price, description: description || "", image: image || "" };
+}
+
+// ===== ЕДИНЫЙ МАССИВ МЕНЮ =====
+const MENU = [
+  {
+    id: "cold", title: "Холодные закуски", icon: "🥗",
+    items: [
+      dish("Домашние соленья", 60000, "Ассорти сезонных овощей."),
+      dish("Мясное ассорти", 250000, "Отборные мясные деликатесы."),
+      dish("Мясное ассорти по-кавказски", 350000, "Традиционные мясные деликатесы, свежая зелень."),
+      dish("Рыбное ассорти", 380000, "Нежная рыба и морские деликатесы."),
+      dish("Овощное ассорти", 60000, "Свежие сезонные овощи, зелень."),
+      dish("Брынза с зеленью", 50000, "Брынза, ароматная зелень, оливковое масло."),
+      dish("Оливки и маслины", 35000, "Отборные оливки и маслины."),
+      dish("Сет из брускетт", 150000, "Ассорти авторских брускетт."),
+      dish("Утиный паштет", 45000, "Нежный паштет из утки, подача от шефа."),
+      dish("Сет хумуса", 45000, "Классический хумус, оливковое масло, нут, свёкла, тахини."),
+      dish("Скумбрия", 75000, "Нежная скумбрия, маринованный лук."),
+      dish("Сельдь по-русски", 70000, "Сельдь, картофель, маринованный лук."),
+      dish("Куриный рулет", 70000, "Нежное куриное филе, специи, зелень.")
+    ]
+  },
+  {
+    id: "order", title: "Блюда на заказ", icon: "🍽️",
+    items: [
+      dish("Мясной сет на 4 персоны", 600000, "Вырезка, куриные крылышки, люля-кебаб, корейка, бедро, овощи гриль, картофель Айдахо, лук и специи."),
+      dish("Мясной сет на 6 персон", 900000, "Говяжьи рёбра, вырезка, крылышки, корейка, молотый, бедро, овощи гриль, картофель Айдахо, лук, киви и специи."),
+      dish("Мясной сет на 10 персон", 1500000, "Говяжья рулька, говяжьи рёбра, вырезка, крылышки, корейка, бедро, молотый, овощи гриль, картофель Айдахо, костный мозг и зелёный багет."),
+      dish("Рыбный сет", 1300000, "Дорадо, сибас, сёмга, судак, форель и креветки. Подаётся с овощами, рисом, цукини, миксом зелени и специями."),
+      dish("Пирожок из баранины", 480000, "Баранина, думба, картофель, лук и специи."),
+      dish("Шурпа из баранины", 50000, "Баранья корейка, картофель, морковь, болгарский перец, помидор, чеснок, зелень и специи."),
+      dish("Хашлама из говядины с овощами", 400000, "Нежная говядина, сезонные овощи, зелень и ароматные специи.")
+    ]
+  },
+  {
+    id: "shashlik", title: "Шашлыки", icon: "🍢",
+    items: [
+      dish("Шашлык из вырезки", 90000, "Нежная говяжья вырезка, приготовленная на углях."),
+      dish("Шашлык из баранины", 80000, "Сочная баранина с ароматом дымка."),
+      dish("Баранья корейка", 130000, "Нежная баранья корейка, приготовленная на углях."),
+      dish("Молотый шашлык", 50000, "Сочный мясной фарш с пряностями, приготовленный на углях."),
+      dish("Овощи на гриле", 40000, "Ассорти свежих овощей, обжаренных на гриле."),
+      dish("Шампиньоны на гриле", 35000, "Сочные шампиньоны с ароматом гриля.")
+    ]
+  },
+  {
+    id: "mangal", title: "Блюда на мангале", icon: "🔥",
+    items: [
+      dish("Стейк Ти-Бон", 280000, "Сочный стейк на кости из отборной говядины, приготовленный на открытом огне."),
+      dish("Рибай на кости", 220000, "Мраморная говядина с насыщенным вкусом и ароматом дымка, приготовленная на мангале."),
+      // ПРОВЕРИТЬ: в исходном тексте цена записана как «130.00». Принято 130 000 сум.
+      dish("Куриный стейк", 130000, "Нежное куриное филе, маринованное в фирменных специях и обжаренное на углях."),
+      dish("Перепёлка на мангале", 80000, "Нежная перепёлка, маринованная с ароматными травами и специями, приготовленная на открытом огне.")
+    ]
+  },
+  {
+    id: "fish", title: "Рыба и морепродукты", icon: "🐟",
+    items: [
+      dish("Дорадо", 200000, "Запечённая дорадо с ароматными травами, лимоном и сезонными овощами."),
+      dish("Сибас", 190000, "Нежный сибас, запечённый с лимоном, свежими травами и овощами."),
+      dish("Стейк из форели в сливочно-икорном соусе", 170000, "Сочный стейк из форели, нежный сливочный соус, красная икра и свежая зелень."),
+      // ПРОВЕРИТЬ: в исходном тексте цена и описание были слиты («220.00»). Принято 220 000 сум.
+      dish("Лосось в сливочном соусе с королевскими креветками и ананасом", 220000, "Нежный лосось, королевские креветки, сладкий ананас и бархатистый сливочный соус."),
+      dish("Мидии под пармезаном", 180000, "Запечённые мидии под золотистой корочкой пармезана, с ароматными травами."),
+      dish("Мидии в панцире в сливочном соусе", 160000, "Сочные мидии в раковинах, нежный сливочный соус, чеснок и свежая зелень."),
+      dish("Королевские креветки в медовом соусе", 200000, "Обжаренные королевские креветки, авторский медовый соус, кунжут и свежая зелень.")
+    ]
+  },
+  {
+    id: "meat", title: "Горячие блюда из мяса", icon: "🥩",
+    items: [
+      dish("Медальоны в перечном соусе", 160000, "Сочные медальоны из говяжьей вырезки, насыщенный перечный соус."),
+      dish("Медальоны в сливочно-грибном соусе", 170000, "Медальоны из говяжьей вырезки, лесные грибы, нежный сливочный соус."),
+      dish("Говядина Веллингтон", 240000, "Нежная говяжья вырезка, запечённая в слоёном тесте с грибным дюкселем, подача от шефа."),
+      dish("Говяжьи рёбра, томлённые в вине", 170000, "Сочные говяжьи рёбра, медленно томлённые в красном вине с ароматными специями."),
+      dish("Баранья лента в соусе сациви", 190000, "Нежная баранина, ароматный ореховый соус сациви, свежая зелень."),
+      dish("Каре ягнёнка с овощами под фирменным соусом", 220000, "Сочное каре ягнёнка, сезонные овощи и авторский соус от шефа."),
+      dish("Нежная говядина, тушённая с овощами", 130000, "Томлёная говядина, сезонные овощи и насыщенный мясной соус."),
+      dish("Бефстроганов от Wine Garden", 170000, "Нежная говядина, обжаренные грибы, сливочный соус, ароматные специи."),
+      // ПРОВЕРИТЬ: цена в исходном меню отсутствует — не придумана (null = «Цена уточняется»).
+      dish("Томлёный бычий хвост с нежным картофельным пюре", null, "")
+    ]
+  },
+  {
+    id: "soups", title: "Супы", icon: "🍲",
+    items: [
+      dish("Уха по-царски", 80000, "Наваристый рыбный бульон, филе лосося и судака, овощи, свежая зелень."),
+      dish("Украинский борщ", 45000, "Насыщенный мясной бульон, свёкла, капуста, овощи, сметана, зелень."),
+      dish("Шурпа из бычьих хвостов", 70000, "Ароматный бульон, томлёные бычьи хвосты, картофель, морковь, сладкий перец и свежая зелень."),
+      dish("Суп-пюре из шпината", 45000, "Нежный крем-суп из свежего шпината с кабачком, чесноком и лёгким куриным бульоном, подаётся с греческим йогуртом."),
+      // Описание в исходном меню не указано.
+      dish("Пельмени", 40000, "")
+    ]
+  },
+  {
+    id: "salads", title: "Салаты", icon: "🥬",
+    items: [
+      dish("Оливье с языком", 65000, "Классический оливье с нежным говяжьим языком."),
+      dish("Мужской каприз", 50000, "Сытный салат с мясом, яйцом и сыром."),
+      dish("Салат с форелью и апельсином", 80000, "Слабосолёная форель, сочный апельсин и свежая зелень."),
+      dish("Хрустящий брокколи", 60000, "Свежий брокколи с хрустящими добавками и фирменной заправкой."),
+      dish("Цезарь с креветками", 110000, "Хрустящий романо, тигровые креветки, пармезан, крутоны, фирменный соус «Цезарь»."),
+      dish("Цезарь с курицей", 55000, "Романо, куриное филе, пармезан, крутоны, фирменный соус «Цезарь»."),
+      dish("Фирменный салат ПП", 70000, "Свежие овощи, зелень, нежный белок, лёгкая авторская заправка."),
+      dish("Греческий салат Wine Garden", 60000, "Томаты, огурцы, сладкий перец, маслины, красный лук, фета, орегано."),
+      dish("Хрустящие баклажаны", 65000, "Хрустящий баклажан, свежие овощи, кинза, фирменный соус."),
+      // ПРОВЕРИТЬ: в исходном тексте название и цена шли в необычном порядке; указано 80 000.
+      dish("Салат с рукколой и рикоттой", 80000, "Руккола, рикотта, сезонные овощи, орехи, авторская заправка."),
+      dish("Стейк-салат", 110000, "Сочный говяжий стейк, микс салатов, свежие овощи, пармезан, фирменный соус."),
+      dish("Хоровац", 45000, "Запечённые овощи на гриле, зелень, ароматные специи.")
+    ]
+  },
+  {
+    id: "hot", title: "Горячие закуски", icon: "🥟",
+    items: [
+      dish("Трубочки с мясом", 65000, "Хрустящие трубочки с сочной мясной начинкой."),
+      dish("Куриные трубочки с грибами", 60000, "Нежное куриное филе с грибами в хрустящей корочке."),
+      dish("Трубочки с брынзой", 50000, "Хрустящие трубочки с нежной начинкой из брынзы."),
+      dish("Мулены", 60000, "Хрустящая закуска с нежной и ароматной начинкой."),
+      dish("Рыбная закуска", 150000, "Нежная рыбная начинка в хрустящей оболочке."),
+      dish("Рулетики из баклажанов", 50000, "Обжаренные баклажаны с нежной ароматной начинкой."),
+      dish("Бараньи язычки под грибным соусом велюте", 80000, "Нежные бараньи язычки, шелковистый грибной велюте и ароматные травы."),
+      dish("Говяжий язык со сливочно-горчичным соусом", 75000, "Нежный говяжий язык, сливочно-горчичный соус и свежая зелень."),
+      dish("Жареный адыгейский сыр", 40000, "Нежный сыр с хрустящей корочкой, подаётся с соусом граната.")
+    ]
+  }
+];
+
+// ===== Форматирование цены =====
+const priceFormatter = new Intl.NumberFormat("ru-RU");
+function formatPrice(price) {
+  if (typeof price !== "number" || !isFinite(price) || price <= 0) return null;
+  return priceFormatter.format(price) + " сум";
+}
+
+// ===== Вспомогательные функции =====
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+function norm(s) { return String(s || "").toLowerCase().replace(/ё/g, "е").trim(); }
+
+const state = { cat: "all", query: "" };
+const $menu = document.getElementById("menu");
+const $cats = document.getElementById("cats");
+const $search = document.getElementById("search");
+const $clear = document.getElementById("clear");
+
+// ===== Значок и цвет заставки для каждого блюда =====
+const ICONS = [
+  [/пельмен/, "🥟"], [/борщ|шурпа|уха|суп|хашлама/, "🍲"], [/хумус/, "🫘"], [/оливк|маслин/, "🫒"],
+  [/брускетт/, "🥖"], [/паштет/, "🥖"], [/сыр|брынз|рикотт/, "🧀"], [/мидии/, "🦪"], [/креветк/, "🦐"],
+  [/скумбри|сельд|рыб|дорадо|сибас|форел|лосос|семг/, "🐟"], [/шампиньон|гриб/, "🍄"], [/баклажан/, "🍆"],
+  [/перепел|курин|куриц|цезарь с курицей|крыл/, "🍗"], [/шашлык|люля/, "🍢"], [/баран|ягн|каре|корейка/, "🍖"],
+  [/стейк|рибай|ти-бон|медальон|вырезк|говяд|говяж|веллингтон|бефстроганов|бычий|язык|язычк/, "🥩"],
+  [/трубочк|мулен|рулетик/, "🌯"], [/овощ|хоровац|соленья|брокколи/, "🥦"], [/салат|цезарь|каприз|оливье/, "🥗"]
+];
+function dishIcon(item, fallback) {
+  const n = norm(item.name);
+  for (let i = 0; i < ICONS.length; i++) if (ICONS[i][0].test(n)) return ICONS[i][1];
+  return fallback;
+}
+function dishHue(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % 360;
+  return 135 + (h % 40);   // оттенки зелёного
+}
+
+// ===== Карточка блюда =====
+function buildCard(item, icon) {
+  const card = el("article", "card");
+  const imgBox = el("div", "img");
+
+  const ph = el("div", "placeholder");
+  ph.style.background = "radial-gradient(circle at 30% 20%, hsl(" + dishHue(item.name) + ",42%,22%), #0b1f17 75%)";
+  ph.appendChild(el("span", "ico", dishIcon(item, icon)));
+  ph.appendChild(el("span", "wg", "WG"));
+  imgBox.appendChild(ph);
+
+  if (item.image) {
+    const img = document.createElement("img");
+    img.src = IMAGE_DIR + item.image;
+    img.alt = item.name;
+    img.loading = "lazy";
+    img.onerror = function () { img.remove(); };   // нет файла — остаётся placeholder
+    imgBox.appendChild(img);
+  }
+  card.appendChild(imgBox);
+
+  const body = el("div", "body");
+  body.appendChild(el("h3", "", item.name));
+  if (item.description) body.appendChild(el("p", "", item.description));
+
+  const formatted = formatPrice(item.price);
+  const price = el("div", formatted ? "price" : "price unknown");
+  price.textContent = formatted ? formatted.replace(" сум", "") : "Цена уточняется";
+  if (formatted) price.appendChild(el("small", "", "сум"));
+  body.appendChild(price);
+
+  card.appendChild(body);
+  return card;
+}
+
+// ===== Отрисовка меню =====
+function render() {
+  const q = norm(state.query);
+  $menu.textContent = "";
+  let found = 0;
+
+  MENU.forEach(function (cat) {
+    if (state.cat !== "all" && state.cat !== cat.id) return;
+    const items = cat.items.filter(function (it) { return !q || norm(it.name).includes(q); });
+    if (!items.length) return;
+
+    const section = el("section", "section");
+    section.id = "cat-" + cat.id;
+    section.appendChild(el("h2", "", cat.title));
+    const grid = el("div", "grid");
+    items.forEach(function (it) { grid.appendChild(buildCard(it, cat.icon)); });
+    section.appendChild(grid);
+    $menu.appendChild(section);
+    found += items.length;
+  });
+
+  if (!found) $menu.appendChild(el("div", "empty", "Блюда не найдены"));
+}
+
+// ===== Кнопки категорий =====
+function buildCategories() {
+  const list = [{ id: "all", title: "Всё меню" }].concat(MENU);
+  list.forEach(function (cat) {
+    const btn = el("button", "chip" + (cat.id === state.cat ? " active" : ""), cat.title);
+    btn.type = "button";
+    btn.dataset.id = cat.id;
+    btn.addEventListener("click", function () {
+      state.cat = cat.id;
+      $cats.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("active", c === btn); });
+      btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    $cats.appendChild(btn);
+  });
+}
+
+// ===== Поиск =====
+$search.addEventListener("input", function () {
+  state.query = $search.value;
+  $clear.hidden = !$search.value;
+  render();
+});
+$clear.addEventListener("click", function () {
+  $search.value = "";
+  state.query = "";
+  $clear.hidden = true;
+  render();
+  $search.focus();
+});
+
+// ===== Запуск =====
+buildCategories();
+render();
+
+</script>
+</body>
+</html>
